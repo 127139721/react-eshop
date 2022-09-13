@@ -4,7 +4,7 @@ import React, {useContext, Fragment} from 'react'
 import './navigation.styles.scss'
 import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
 import { UserContext } from '../../contexts/user.context';
-import { signOutUser } from 'firebase/auth';
+import { signOutUser } from '../../utils/firebase/firebase.utils';
 
 const Navigation = () => {
     const { currentUser, setCurrentUser } = useContext(UserContext); //sunscribe context 如果值有更新, 此component就會re-rendering
