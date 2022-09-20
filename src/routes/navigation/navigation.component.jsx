@@ -4,15 +4,14 @@ import React, {useContext, Fragment} from 'react'
 import './navigation.styles.scss'
 import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
 import { UserContext } from '../../contexts/user.context';
+import { CartContext } from '../../contexts/cart.context';
 import { signOutUser } from '../../utils/firebase/firebase.utils';
+import CartIcon from '../../components/cart-icon/cart-icon.component';
+import CartDropdown from '../../components/cart-dropdown/cart-dropdown.component';
 
 const Navigation = () => {
-    const { currentUser, setCurrentUser } = useContext(UserContext); //sunscribe context 如果值有更新, 此component就會re-rendering
-    
-    const signOutHandler = async() => {
-      await signOutUser(); //使用firebase 的 signout function
-      setCurrentUser(null); //登出後設置 context currentUser 為 null
-    };
+    const { currentUser } = useContext(UserContext); //sunscribe context 如果值有更新, 此component就會re-rendering
+    const { isCartOpen } = useContext(CartContext);
 
     return (
       <Fragment>
@@ -26,7 +25,7 @@ const Navigation = () => {
             </Link>
   
             {currentUser ? (
-              <span className='nav-link' onClick={signOutHandler}>
+              <span className='nav-link' onClick={signOutUser}>
                 {' '}
                 SIGN OUT{' '}
               </span>
@@ -35,7 +34,9 @@ const Navigation = () => {
                 SIGN IN
               </Link>
             )}
+            <CartIcon />
           </div>
+          { isCartOpen && <CartDropdown /> }
         </div>
         <Outlet />
       </Fragment>

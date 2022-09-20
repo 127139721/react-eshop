@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged,
+  onAuthStateChanged, //用來記錄登入出狀態
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -42,6 +42,11 @@ googleProvider.setCustomParameters({
 
 //get an auth instance
 export const auth = getAuth();
+
+//user登入或登出, 都會觸發到這裡, 紀錄登入出狀態, 使用這個方法的 component 需要傳入一個 callback function
+export const onAuthStateChangedListener = (callback) =>
+  //listener 會監聽user login/out
+  onAuthStateChanged(auth, callback);
 
 //將auth instance & FB funciton provider 傳入 signInWithPopup(FB function), 再以 signInWithGooglePopup export 給別的 component 使用
 export const signInWithGooglePopup = () =>
@@ -122,5 +127,3 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 //登出
 export const signOutUser = async() => await signOut(auth);
 
-export const onAuthStateChangedListener = (callback) =>
-  onAuthStateChanged(auth, callback);

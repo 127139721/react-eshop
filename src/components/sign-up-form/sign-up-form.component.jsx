@@ -5,7 +5,6 @@ import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '
 import FormInput from '../form-input/form-input.component';
 import Button from "../button/button.component";
 import './sign-up-form.styles.scss';
-import { UserContext } from '../../contexts/user.context';
 
 //宣告物件給 input fileds 使用
 const defaultFormFields = {
@@ -21,9 +20,6 @@ const SignUpForm = () => {
     
     //從 formFields de-constructing 取值
     const {displayName, email, password, confirmPassword} = formFields;
-
-    //using context
-    const { setCurrentUser } = useContext(UserContext);
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
@@ -41,8 +37,6 @@ const SignUpForm = () => {
        try{
             //使用email, password 建立 a user, 注意這裡只會回傳一個 user credential, 不會真正去建立 a user in our document
             const { user } = await createAuthUserWithEmailAndPassword(email, password); 
-            //設 user 回 context 
-            setCurrentUser(user);
             //用上面回傳的 a user credential 真正去建立 a user into our document.(para1.user: user credential & para2.{displayName}: user name)
             await createUserDocumentFromAuth(user, {displayName});
             resetFormFields();

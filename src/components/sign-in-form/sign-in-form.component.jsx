@@ -1,11 +1,9 @@
-import React, {useState, useContext, Component} from 'react'
+import React, {useState, Component} from 'react'
 
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth, signInWithGooglePopup, signInAuthUserWithEmailAndPassword} from '../../utils/firebase/firebase.utils'
 import FormInput from '../form-input/form-input.component';
 import Button from "../button/button.component";
 import './sign-in-form.styles.scss';
-import { UserContext } from '../../contexts/user.context';
-
 
 //宣告物件給 input fileds 使用
 const defaultFormFields = {
@@ -19,16 +17,13 @@ const SignInForm = () => {
     //從 formFields de-constructing 取值
     const {email, password} = formFields;
 
-    const { setCurrentUser } = useContext(UserContext);
-
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
     }
 
     //非re-direct login
     const signInWithGoogle  = async() => {
-        const {user} = await signInWithGooglePopup();
-        await createUserDocumentFromAuth(user);
+        await signInWithGooglePopup();
     };
 
     //按下建立 user
@@ -36,7 +31,6 @@ const SignInForm = () => {
        event.preventDefault();
        try{
             const { user } = await signInAuthUserWithEmailAndPassword(email, password); //登入後抓出google回傳之user info
-            setCurrentUser(user); //透過 context 回設
             resetFormFields();
        }
        catch(error){
