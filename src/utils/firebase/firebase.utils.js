@@ -14,10 +14,10 @@ import {
   doc, //取得doc instance
   getDoc, //使用doc instanec 取得 doc data
   setDoc, //使用doc instanec 設置 doc data
-  collection,
-  writeBatch,
-  query,
-  getDocs,
+  collection, //建立新的 collection on FB
+  writeBatch, //寫入到 FB
+  query, //從FB 抓出資料
+  getDocs, //從FB 取出doc 
 } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -58,6 +58,23 @@ export const signInWithGoogleRedirect = () =>
 //setting firebase store database 
 export const db = getFirestore();
 
+//寫入資料到 FB
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd
+) => {
+  const batch = writeBatch(db);
+  const collectionRef = collection(db, collectionKey);
+  
+  objectsToAdd.forEach((object) => {
+     const docRef = doc(collectionRef, object.title.toLowerCase());
+     batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log('done');
+};
+
 //creating a user into our database
 export const createUserDocumentFromAuth = async(userAuth, additionalInformation = {}) => {
   if (!userAuth) 
@@ -87,29 +104,19 @@ export const createUserDocumentFromAuth = async(userAuth, additionalInformation 
   return userDocRef;
 };
 
-export const addCollectionAndDocuments = async (
-  collectionKey,
-  objectsToAdd,
-  field
-) => {
-  const collectionRef = collection(db, collectionKey);
-  const batch = writeBatch(db);
-
-  objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, object.title.toLowerCase());
-    batch.set(docRef, object);
-  });
-
-  await batch.commit();
-  console.log('done');
-};
-
+//從FB 的 doc 中取出資料
 export const getCategoriesAndDocuments = async () => {
   const collectionRef = collection(db, 'categories');
   const q = query(collectionRef);
 
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
 };
 
 export const createAuthUserWithEmailAndPassword = async (email, password) => {
