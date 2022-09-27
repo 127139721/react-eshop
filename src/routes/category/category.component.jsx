@@ -16,15 +16,15 @@ const Category = () => {
 
     //因為取得資料為async 所以這裡需要 sage guard: products && 來判斷是否已經取得資料了
     return (
-        <Fragment>
-          <h2 className='category-title'>{category.toUpperCase()}</h2>
-          <div className='category-container'>
-            {products &&
-              products.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-          </div>
-        </Fragment>
-      );
+      <Fragment>
+        <h2 className='category-title'>{category.toUpperCase()}</h2>
+        <div className='category-container'>
+          {products &&
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+        </div>
+      </Fragment>
+    );
 };
 export default Category;
