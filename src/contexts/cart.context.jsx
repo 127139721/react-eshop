@@ -1,17 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-export const CartContext = createContext(
-    {
-        isCartOpen: false,
-        setIsCartOpen: () => {},
-        cartItems: [], //購物車內容
-        addItemToCart: () => {}, //加物品到購物車
-        removeItemToCart: () => {},
-        clearItemFromCart: () => {},
-        cartCount: 0, //購物車內有多少產品 for context
-        cartTotal: 0 //price
-    }
-)
+import { createAction } from '../utils/reducer/reducer.utils';
+import React, { createContext, useReducer, useState } from "react";
 
 //helper function會回傳一陣列, cartItems(array):現有購物車內容, productToAdd(array)要加入購物車之產品可有多個
 const addCartItem = (cartItems, productToAdd) => {
@@ -53,47 +41,113 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
     );
 }
 
-//從購物車中刪除某項產品(全部數量刪除)
+//helper function會回傳一陣列, 從購物車中刪除某項產品(全部數量刪除)
 const clearCartItem = (cartItems, cartItemToClear) => {
     return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 }
 
+/* cartReducer starts */
+const CART_ACTION_TYPES = {
+    SET_IS_CART_OPEN: 'SET_IS_CART_OPEN',
+    SET_CART_ITEMS: 'SET_CART_ITEMS',
+    SET_CART_COUNT: 'SET_CART_COUNT',
+    SET_CART_TOTAL: 'SET_CART_TOTAL',
+};
+
+const INITIAL_STATE = {
+    isCartOpen: false,
+    cartItems: [],
+    cartCount: 0,
+    cartTotal: 0,
+}
+
+const cartReducer = (state, action) => {
+    const { type, payload } = action; //從 action 中取出 type, payload
+
+    switch(type) {
+        case CART_ACTION_TYPES.SET_CART_ITEMS:
+            return {
+                ...state, //複製 cartReducer 原有狀態(date)
+                ...payload //用 payload 更新 cartReducer 原有狀態(date)
+            }
+        default: 
+            throw new Error(`unhandled type of ${type} in cartReducer`);
+    }
+};
+/* cartReducer ends */
+
+export const CartContext = createContext(
+    {
+        isCartOpen: false,
+        setIsCartOpen: () => {},
+        cartItems: [], //購物車內容
+        addItemToCart: () => {}, //加物品到購物車
+        removeItemToCart: () => {},
+        clearItemFromCart: () => {},
+        cartCount: 0, //購物車內有多少產品 for context
+        cartTotal: 0 //price
+    }
+);
+
 export const CartProvider = ({children}) => {
     const [isCartOpen, setIsCartOpen] = useState(false);
-    const [cartItems, setCartItems] = useState([]);
-    const [cartCount, setCartCount] = useState(0); //購物車內有多少產品 for component 
-    const [cartTotal, setCartTotal] = useState(0);
+    
+    //using cartReducer
+    const [{cartItems, cartCount, cartTotal}, dispatch] = useReducer(cartReducer, INITIAL_STATE);
 
-    //查看是否需要re-render cartCount
-    useEffect(() => {
+    //using helper functions start *******************************************
+    const addItemToCart = (productToAdd) => {
+        const newCartItems = addCartItem(cartItems, productToAdd);
+        updatecartItemsReducer(newCartItems);
+    };
+
+    const removeItemToCart = (cartItemToRemove) => {
+        const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+        updatecartItemsReducer(newCartItems);
+    };
+
+    const clearItemFromCart = (cartItemToClear) => {
+        const newCartItems = clearCartItem(cartItems, cartItemToClear);
+        updatecartItemsReducer(newCartItems);
+    };
+    //helper functions end *******************************************
+
+    //using reducer starts *******************************************
+    const updatecartItemsReducer = (cartItems) => {
+        //generating newCartTotal
+        const newCartTotal = cartItems.reduce(
+            (total, cartItem) => total + cartItem.quantity * cartItem.price, 0
+        );
+
+        //generating newCartCount
         //使用 js reduce funciton 來累加 cartCount
         const newCartCount = cartItems.reduce(
             (total, cartItem) => total + cartItem.quantity, 0
         );
-        setCartCount(newCartCount);
-    }, [cartItems]);
 
-    //計算 total price
-    useEffect(() => {
-        const newCartTotal = cartItems.reduce(
-            (total, cartItem) => total + cartItem.quantity * cartItem.price, 0
-        );
-        setCartTotal(newCartTotal);
-    }, [cartItems]);
+        const payload = {
+            cartItems,
+            cartCount: newCartCount,
+            cartTotal: newCartTotal,
+        };
 
-    const addItemToCart = (productToAdd) => {
-        setCartItems(addCartItem(cartItems, productToAdd))
+        //dispatching new action with payload = {newCartItems, newCartTotal, newCartCount}
+        dispatch( createAction(CART_ACTION_TYPES.SET_CART_ITEMS, payload) );
     };
+    //using reducer ends *******************************************
 
-    const removeItemToCart = (cartItemToRemove) => {
-        setCartItems(removeCartItem(cartItems, cartItemToRemove))
-    };
 
-    const clearItemFromCart = (cartItemToClear) => {
-        setCartItems(clearCartItem(cartItems, cartItemToClear))
-    };
-
-    const value = {isCartOpen, setIsCartOpen, cartItems, addItemToCart, cartCount, removeItemToCart, clearItemFromCart, cartTotal};
+    const value = 
+        {
+            isCartOpen, 
+            setIsCartOpen, 
+            cartItems, 
+            addItemToCart, 
+            cartCount, 
+            removeItemToCart, 
+            clearItemFromCart, 
+            cartTotal
+        };
 
     return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

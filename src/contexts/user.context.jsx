@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 
 import { onAuthStateChangedListener, createUserDocumentFromAuth } from "../utils/firebase/firebase.utils";
 
@@ -10,10 +10,44 @@ export const UserContext = createContext(
     }
 );
 
+/*reducer starts */
+export const USER_ACTION_TYPES = {
+    SET_CURRENT_USER: 'SET_CURRENT_USER',
+};
+
+const userReducer = (state, action) => {
+    const { type, payload } = action; //從action中取出 type & payload
+
+    switch(type) {
+        case USER_ACTION_TYPES.SET_CURRENT_USER:
+            return {
+                ...state, //複製之前的 userReducer state
+                currentUser: payload, //從 action 中取出之 payload, 蓋掉存在 state 中的 currentUser
+                //如此便只更新 userReducer 中的 currentUser, state 中其他資料不變
+            }
+        default:
+            throw new Error(`Unhandled type ${type} in userReducer`);
+    }
+};
+/*reducer ends */
+
+const INITIAL_STATE = {
+    currentUser: null,
+}
+
 //a provider which is a component
 export const UserProvider = ({ children }) => {
     //default value for this component
-    const [currentUser, setCurrentUser] = useState(null);
+    //const [currentUser, setCurrentUser] = useState(null);
+    
+    //using userReducer
+    //get back from userReducer( {currentUser}:從目前reducer's state 取出 currentUser data, dispatch function) = (要用的REDUCER, 給此REDUCER的初始狀態)
+    const [ {currentUser}, dispatch] = useReducer(userReducer, INITIAL_STATE);
+    console.log('currentUser', currentUser);
+    const setCurrentUser = (user) => {
+        dispatch({type: USER_ACTION_TYPES.SET_CURRENT_USER, payload: user})
+    };
+
     //把要讀取之值跟設置的function通通給 value object
     const value = { currentUser, setCurrentUser };
 
