@@ -15,6 +15,10 @@ export const USER_ACTION_TYPES = {
     SET_CURRENT_USER: 'SET_CURRENT_USER',
 };
 
+const INITIAL_STATE = {
+    currentUser: null,
+};
+
 const userReducer = (state, action) => {
     const { type, payload } = action; //從action中取出 type & payload
 
@@ -31,9 +35,7 @@ const userReducer = (state, action) => {
 };
 /*reducer ends */
 
-const INITIAL_STATE = {
-    currentUser: null,
-}
+
 
 //a provider which is a component
 export const UserProvider = ({ children }) => {
