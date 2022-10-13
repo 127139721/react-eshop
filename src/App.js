@@ -2,7 +2,7 @@ import {Routes, Route} from 'react-router-dom';
 import React, { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 
-import { onAuthStateChangedListener, createUserDocumentFromAuth } from "./utils/firebase/firebase.utils";
+import { onAuthStateChangedListener, createUserDocumentFromAuth, getCurrentUser } from "./utils/firebase/firebase.utils";
 import Home from './routes/home/home.component';
 import Navigation from './routes/navigation/navigation.component';
 import Authentication from './routes/authentication/authentication.component';
@@ -15,8 +15,10 @@ import { arrayRemove } from 'firebase/firestore';
 const App = () => {
   
   const dispatch = useDispatch();
+  
   //使用 useEffect 去觸發 onAuthStateChangedListener 觀察 user login/out
   useEffect(() => {
+    /*
     //呼叫onAuthStateChangedListener後 google 會回傳一個 unsubscribe object
     const unsubscribe = onAuthStateChangedListener(
         (user) => {
@@ -28,6 +30,8 @@ const App = () => {
         }
     );
     return unsubscribe //clean up the callback function
+    */
+    getCurrentUser().then((user) => console.log('user', user));
   }, []);
   
   return (

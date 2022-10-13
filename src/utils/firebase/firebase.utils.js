@@ -48,6 +48,22 @@ export const onAuthStateChangedListener = (callback) =>
   //listener 會監聽user login/out
   onAuthStateChanged(auth, callback);
 
+//for sagas
+export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      //fb 的 onAuthStateChanged() 一共可以傳入三變數
+      const unsubscribe = onAuthStateChanged(
+        auth, //auth object
+        //callback function
+        (userAuth) => { //server returns a userAuth promise
+          unsubscribe(); //release resource
+          resolve(userAuth); //resolve userAuth promise
+        },
+        reject //when something goes wrong
+      );
+    });
+};
+
 //將auth instance & FB funciton provider 傳入 signInWithPopup(FB function), 再以 signInWithGooglePopup export 給別的 component 使用
 export const signInWithGooglePopup = () =>
   signInWithPopup(auth, googleProvider);
