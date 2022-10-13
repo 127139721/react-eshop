@@ -117,7 +117,7 @@ export const createUserDocumentFromAuth = async(userAuth, additionalInformation 
     }
   }
 
-  return userDocRef;
+  return userSnapshot; //要回傳snapshot(含有資料)給userSagas 使用, 因為userDocRef只是pointer
 };
 
 //從FB 的 doc 中取出資料
