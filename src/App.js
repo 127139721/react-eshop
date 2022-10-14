@@ -12,9 +12,7 @@ import { checkUserSession } from './store/user/user.action';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
 const App = () => {
-  
-  const dispatch = useDispatch();
-  
+  const dispatch = useDispatch(); 
   //使用 useEffect 觀察 user login/out
   useEffect(() => {
     dispatch(checkUserSession());
