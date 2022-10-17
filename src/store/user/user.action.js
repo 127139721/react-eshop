@@ -30,6 +30,7 @@ export const signUpSuccess = (user, additionalDetails) =>
 export const signUpFailed = (error) =>
   createAction(USER_ACTION_TYPES.SIGN_UP_FAILED, error);
 
+//sign out 不需要任何資料所以不需要給 payload
 export const signOutStart = () =>
   createAction(USER_ACTION_TYPES.SIGN_OUT_START);
 

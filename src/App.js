@@ -12,6 +12,26 @@ import { checkUserSession } from './store/user/user.action';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
 const App = () => {
+  
+  var removeDuplicates = function(nums) {
+    let val = 0;
+    let arrLength = nums.length;
+
+    for(let i=0; i<nums.length; i++){
+      val = nums[i];
+      if(val === nums[i+1]){
+        nums.splice(i+1, 1, '_');
+        arrLength = arrLength - 1;
+      }
+    }
+
+    return nums;
+  };
+
+  const nums = [1,1,2]
+  removeDuplicates(nums);
+
+
   const dispatch = useDispatch(); 
   //使用 useEffect 觀察 user login/out
   useEffect(() => {

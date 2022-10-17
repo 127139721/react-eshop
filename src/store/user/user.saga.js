@@ -87,12 +87,59 @@ export function* onEmailSignInStart() {
 /* signIn with form end **** */
 
 
+/* signUp start **** */
+export function* signUp({payload: {email, password, displayName}}) {
+    try{
+        //呼叫FB function(createAuthUserWithEmailAndPassword), 傳入 email, password, 然後取出 user object
+        const { user } = yield call(createAuthUserWithEmailAndPassword, email, password);
+        //成功 sign up then call the reducer action(SIGN_UP_SUCCESS), SIGN_UP_SUCCESS並不會對reducer產生作用, 其目的是觸發另一個 saga 
+        yield put(signUpSuccess( user, {displayName} ));
+    }catch(error){
+        yield put(signInFailed(error));
+    }
+}
+
+export function* onSignUpStart() {
+    yield takeLatest(USER_ACTION_TYPES.SIGN_UP_START, signUp)
+}
+/* signUp end **** */
+
+
+/* signUp success and sign in start **** */
+export function* signInAfterSignUp({payload: { user, additionalDetails }}) {
+    yield call(getSnapshotFromUserAuth, user, additionalDetails);
+}
+
+export function* onSignUpSuccess() {
+    yield takeLatest(USER_ACTION_TYPES.SIGN_UP_SUCCESS, signInAfterSignUp)
+}
+/* signUp success and sign in start **** */
+
+
+/* signout starts **** */
+export function* signOut() {
+    try {
+        yield call(signOutUser); //call fb function
+        yield put(signOutSuccess()); //triggers action
+    } catch(error) {
+        yield put(signOutFailed(error)); //triggers action
+    }
+}
+
+export function* onSignOutStart() {
+    yield takeLatest(USER_ACTION_TYPES.SIGN_OUT_START, signOut)
+}
+/* signout ends **** */
+
 
 export function* userSagas() {
     yield all
     ([
         call(onCheckUserSession), 
         call(onGoogleSignInStart), 
-        call(onEmailSignInStart)
+        call(onEmailSignInStart),
+        call(onSignUpStart),
+        call(onSignUpSuccess),
+        call(onSignOutStart)
     ])
 }

@@ -14,10 +14,10 @@ export const userReducer = (state = INITIAL_STATE, action) => {
             return { 
                     ...state, //複製之前的 userReducer state 
                     currentUser: payload }; //從 action 中取出之 payload, 蓋掉存在 state 中的 currentUser, 如此便只更新 userReducer 中的 currentUser, state 中其他資料不變
-
+        
         case USER_ACTION_TYPES.SIGN_OUT_SUCCESS:
-            return { ...state, currentUser: null };
-
+            return { ...state, currentUser: null };//登出要把 currentUser 設置為 null
+        
         case USER_ACTION_TYPES.SIGN_OUT_FAILED:
         case USER_ACTION_TYPES.SIGN_IN_FAILED:
         case USER_ACTION_TYPES.SIGN_UP_FAILED:
