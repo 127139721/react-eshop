@@ -13,27 +13,6 @@ import { arrayRemove } from 'firebase/firestore';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
 const App = () => {
-  
-  var checkIfExist = function(arr) {
-    let count = 0;
-    const sortedArr = arr.sort(function(a,b){return a-b});
-    for(let i=0; i<sortedArr.length; i++){
-      const result = sortedArr[i] * 2;
-      arr.map((x) => {
-        if(x === result){
-          count++;
-        }
-      })
-    }
-
-    if(count >= 1)
-      return true;
-    else
-      return false;
-  };
-  
-  checkIfExist([-2,0,10,-19,4,6,-8]);
-  
   const dispatch = useDispatch();
 
   //使用 useEffect 去觸發 onAuthStateChangedListener 觀察 user login/out
@@ -54,7 +33,7 @@ const App = () => {
   return (
     <Routes>
       <Route path='/' element={<Navigation />}>
-        <Route index element={<Home />} />
+        <Route index element={<Home />} />        {/*index 設 true 代表當 url path 為 / 時, 就是顯示 home component */}
         <Route path='shop/*' element={<Shop />} />
         <Route path='auth' element={<Authentication />} />
         <Route path='checkout' element={<Checkout />} />
