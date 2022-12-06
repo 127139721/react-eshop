@@ -9,7 +9,8 @@ import Authentication from './routes/authentication/authentication.component';
 import Shop from "./routes/shop/shop.component";
 import Checkout from './routes/checkout/checkout.component';
 import { setCurrentUser } from './store/user/user.action';
-import { arrayRemove } from 'firebase/firestore';
+
+import { GlobalStyle } from './global.styles.jsx';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
 const App = () => {
@@ -31,14 +32,17 @@ const App = () => {
   }, []);
   
   return (
-    <Routes>
-      <Route path='/' element={<Navigation />}>
-        <Route index element={<Home />} />        {/*index 設 true 代表當 url path 為 / 時, 就是顯示 home component */}
-        <Route path='shop/*' element={<Shop />} />
-        <Route path='auth' element={<Authentication />} />
-        <Route path='checkout' element={<Checkout />} />
-      </Route>
-    </Routes>
+    <>
+      <GlobalStyle></GlobalStyle>
+      <Routes>
+        <Route path='/' element={<Navigation />}>
+          <Route index element={<Home />} />        {/*index 設 true 代表當 url path 為 / 時, 就是顯示 home component */}
+          <Route path='shop/*' element={<Shop />} />
+          <Route path='auth' element={<Authentication />} />
+          <Route path='checkout' element={<Checkout />} />
+        </Route>
+      </Routes>
+    </>
   );
 };
 

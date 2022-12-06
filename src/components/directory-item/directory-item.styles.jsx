@@ -24,6 +24,12 @@ export const DirectoryItemContainer = styled.div`
     margin-left: 7.5px;
   }
 
+  /* 800px 以下會套用 */
+  @media screen and (max-width: 800px) {
+    /* 控制圖片高度 */
+    height: 200px;
+  }
+
   &:hover {
     cursor: pointer;
     /* ${BackgroundImage} 這種寫法可以選取到 DirectoryItemContainer component 內包含之 BackgroundImage */
