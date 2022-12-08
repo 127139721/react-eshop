@@ -8,6 +8,12 @@ export const ProductCartContainer = styled.div`
   align-items: center;
   position: relative;
 
+  @media screen and (max-width: 800px) {
+    /* 因為是要調整更內層的置中, 所以要用 self*/
+    justify-self: center;
+    align-self: center;
+  }
+
   img {
     width: 100%;
     height: 95%;
@@ -30,8 +36,16 @@ export const ProductCartContainer = styled.div`
       opacity: 0.8;
       min-width: 90%;
       padding: 0 10px;
+    
+      img {
+        width: 100%;
+        height: 95%;
+        object-fit: cover;
+        margin-bottom: 5px;
+        
+      }
     }
-  }
+  };
 
   &:hover {
     img {
