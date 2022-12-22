@@ -13,7 +13,7 @@ import { setCurrentUser } from './store/user/user.action';
 import { GlobalStyle } from './global.styles.jsx';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
-const App = () => {
+const App = () => { 
   const dispatch = useDispatch();
 
   //使用 useEffect 去觸發 onAuthStateChangedListener 觀察 user login/out

@@ -1,12 +1,24 @@
 {
     "version": "0.2.0",
     "configurations": [
-        {
-            "type": "chrome",
-            "request": "launch",
-            "name": "Launch Chrome",
-            "url": "http://localhost:3000",
-            "webRoot": "${workspaceRoot}"
-        }
+      {
+        "name": "Debug Jest Tests",
+        "type": "node",
+        "request": "launch",
+        "runtimeArgs": [
+          "--inspect-brk",
+          "${workspaceRoot}/node_modules/jest/bin/jest.js",
+          "--runInBand"
+        ],
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "type": "chrome",
+        "request": "launch",
+        "name": "Launch Chrome",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceRoot}"
+      }
     ]
 }

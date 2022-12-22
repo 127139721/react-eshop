@@ -8,6 +8,7 @@ import CartItem from '../cart-item/cart-item.component';
 import { CartDropdownContainer, EmptyMessage, CartItems } from './cart-dropdown.styles';
 
 const CartDropdown = () => {
+
   //取得目前購物車內容
   const cartItems = useSelector(selectCartItems);
 
