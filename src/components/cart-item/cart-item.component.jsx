@@ -7,7 +7,7 @@ const CartItem = ({ cartItem }) => {
         <div className='cart-item-container' data-testid="custom-element">
             <img src={imageUrl} alt={`${name}`}/>
             <div className='item-details'>
-                <span className='name'>{name}</span>
+                <span className='name' data-testid="cart-item-name">{name}</span>
                 <span className='price'>{quantity} x ${price}</span>
             </div>
         </div>

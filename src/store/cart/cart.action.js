@@ -2,9 +2,26 @@ import { CART_ACTION_TYPES } from './cart.types';
 import { createAction } from "../../utils/reducer/reducer.utils";
 
 
-export const setIsCartToggleHidden = (boolean) => 
-    createAction( CART_ACTION_TYPES.SET_CART_TOGGLE_HIDDEN, boolean);
+export const setIsCartToggleHidden = (boolean) => {
+    return createAction(CART_ACTION_TYPES.SET_CART_TOGGLE_HIDDEN, boolean);
+}
 
+export const addItemToCart = (cartItems, productToAdd) => {
+    const newCartItems = addCartItem(cartItems, productToAdd);
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems)
+};
+    
+export const removeItemFromCart = (cartItems, cartItemToRemove) => {
+    const newCartItems = removeCartItem(cartItems, cartItemToRemove);
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems)
+};
+    
+export const clearItemFromCart = (cartItems, cartItemToClear) => {
+    const newCartItems = clearCartItem(cartItems, cartItemToClear);
+    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
+};
+
+//using helper functions start *******************************************
 //helper function會回傳一陣列, cartItems(array):現有購物車內容, productToAdd(array)要加入購物車之產品可有多個
 const addCartItem = (cartItems, productToAdd) => {
     //找要加入之產品是否有在購物車
@@ -49,20 +66,4 @@ const removeCartItem = (cartItems, cartItemToRemove) => {
 const clearCartItem = (cartItems, cartItemToClear) => {
     return cartItems.filter((cartItem) => cartItem.id !== cartItemToClear.id);
 }
-
-//using helper functions start *******************************************
-export const addItemToCart = (cartItems, productToAdd) => {
-    const newCartItems = addCartItem(cartItems, productToAdd);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems)
-};
-
-export const removeItemFromCart = (cartItems, cartItemToRemove) => {
-    const newCartItems = removeCartItem(cartItems, cartItemToRemove);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems)
-};
-
-export const clearItemFromCart = (cartItems, cartItemToClear) => {
-    const newCartItems = clearCartItem(cartItems, cartItemToClear);
-    return createAction(CART_ACTION_TYPES.SET_CART_ITEMS, newCartItems);
-};
 //using helper functions end *******************************************
