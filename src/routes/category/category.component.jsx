@@ -5,7 +5,9 @@ import { useSelector } from 'react-redux';
 import Spinner from '../../components/spinner/spinner.component';
 import ProductCard from '../../components/product-card/product-card.component';
 import { selectCategoriesMap, selectCategoriesIsLoading} from '../../store/categories/categories.selector'
-import './category.styles.scss';
+import { CategoryContainer, Title } from './category.styles';
+
+
 const Category = () => {
     const { category } = useParams();
     const categoriesMap = useSelector(selectCategoriesMap);
@@ -19,16 +21,18 @@ const Category = () => {
     //因為取得資料為async 所以這裡需要 sage guard: products && 來判斷是否已經取得資料了
     return (
       <Fragment>
-        <h2 className='category-title'>{category.toUpperCase()}</h2>
+        <Title>{category.toUpperCase()}</Title>
         {isLoading ? (
           <Spinner></Spinner>
         ) : (
-          <div className='category-container'>
-          {products &&
-            products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-        </div>
+          <CategoryContainer>
+            {
+              products &&
+                products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))
+            }
+          </CategoryContainer>
         )}
       </Fragment>
     );
