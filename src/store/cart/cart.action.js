@@ -1,8 +1,9 @@
 import { CART_ACTION_TYPES } from './cart.types';
 import { createAction } from "../../utils/reducer/reducer.utils";
 
-export const setIsCartOpen = (boolean) => 
-    createAction( CART_ACTION_TYPES.SET_IS_CART_OPEN, boolean);
+
+export const setIsCartToggleHidden = (boolean) => 
+    createAction( CART_ACTION_TYPES.SET_CART_TOGGLE_HIDDEN, boolean);
 
 //helper function會回傳一陣列, cartItems(array):現有購物車內容, productToAdd(array)要加入購物車之產品可有多個
 const addCartItem = (cartItems, productToAdd) => {

@@ -23,10 +23,10 @@ export const createMockStore = ({ state, reducers }) => {
 describe('CartDropdown component', () => {
 
   /*
-  const CART_INITIAL_STATE =  {"payload": true, "type": "cart/SET_IS_CART_OPEN"}; 
+  const CART_INITIAL_STATE =  {"payload": true, "type": "cart/SET_CART_TOGGLE_HIDDEN"}; 
   const expected = CART_INITIAL_STATE
   it('should render EmptyMessageContainer if cartItems is empty', () => {
-    expect(actions.setIsCartOpen(false)).toEqual(expected);
+    expect(actions.setIsCartToggleHidden(false)).toEqual(expected);
   });
   */
 

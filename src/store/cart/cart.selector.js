@@ -11,7 +11,7 @@ export const selectCartItems = createSelector(
     (cart) => cart.cartItems //output
 );
 
-export const selectIsCartOpen = createSelector(
+export const setIsCartToggleHidden = createSelector(
     [selectCartReducer],
     (cart) => cart.isCartOpen
 );
