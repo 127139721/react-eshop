@@ -1,11 +1,9 @@
 import {useState, useContext} from 'react'
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 import { createAuthUserWithEmailAndPassword, createUserDocumentFromAuth } from '../../utils/firebase/firebase.utils'
 import FormInput from '../form-input/form-input.component';
 import Button from "../button/button.component";
-import { signUpStart } from '../../store/user/user.action';
 import './sign-up-form.styles.scss';
 
 //宣告物件給 input fileds 使用
@@ -17,8 +15,6 @@ const defaultFormFields = {
 };
 
 const SignUpForm = () => {
-    const dispatch = useDispatch();
-
     //上面宣告之物件搭配 useState hook 設定給 input fileds 使用
     const [formFields, setFormFields] = useState(defaultFormFields);
     
@@ -32,12 +28,17 @@ const SignUpForm = () => {
     //按下建立 user
     const handleSubmit = async(event) => {
        event.preventDefault();
+
        if(password !== confirmPassword){
             alert('passwords do not match');
             return;
        }
+
        try{
-            dispatch(signUpStart(email, password, displayName));
+            //使用email, password 建立 a user, 注意這裡只會回傳一個 user credential, 不會真正去建立 a user in our document
+            const { user } = await createAuthUserWithEmailAndPassword(email, password); 
+            //用上面回傳的 a user credential 真正去建立 a user into our document.(para1.user: user credential & para2.{displayName}: user name)
+            await createUserDocumentFromAuth(user, {displayName});
             resetFormFields();
        }
        catch(error){

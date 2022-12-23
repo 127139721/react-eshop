@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
+import {
+  signInAuthUserWithEmailAndPassword,
+  signInWithGooglePopup,
+} from '../../utils/firebase/firebase.utils';
 import { SignInContainer, ButtonsContainer } from './sign-in-form.styles';
-import { googleSignInStart, emailSignInStart } from '../../store/user/user.action';
+
 
 //宣告物件給 input fileds 使用
 const defaultFormFields = {
@@ -13,8 +16,6 @@ const defaultFormFields = {
 };
 
 const SignInForm = () => {
-    const dispatch = useDispatch();
-    
     //上面宣告之物件搭配 useState hook 設定給 input fileds 使用
     const [formFields, setFormFields] = useState(defaultFormFields);
     //從 formFields de-constructing 取值
@@ -26,15 +27,14 @@ const SignInForm = () => {
 
     //非re-direct login
     const signInWithGoogle  = async() => {
-        //await signInWithGooglePopup();
-        dispatch(googleSignInStart());
+        await signInWithGooglePopup();
     };
 
     //按下建立 user
     const handleSubmit = async(event) => {
        event.preventDefault();
        try{
-            dispatch(emailSignInStart(email, password)); //登入後抓出google回傳之user info
+            const { user } = await signInAuthUserWithEmailAndPassword(email, password); //登入後抓出google回傳之user info
             resetFormFields();
        }
        catch(error){

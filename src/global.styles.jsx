@@ -7,19 +7,23 @@ export const GlobalStyle = createGlobalStyle`
         font-family: 'Open Sans Condensed', sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+
         /* 800px 以下會套用 */
         @media screen and (max-width: 800px) {
             padding: 10px;
         }
     }
+
     code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
         monospace;
     }
+
     a {
     text-decoration: none;
     color: black;
     }
+
     * {
     box-sizing: border-box;
     }

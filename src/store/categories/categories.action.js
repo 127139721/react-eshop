@@ -14,7 +14,6 @@ export const fetchCategoriesFailed = (error) =>
 /*給 redux thunk 使用之 fiunctions  end*/
 
 
-/*
 //真正 redux thunk 需搭配 async await, thunk 會 return 一個 dispatch function
 export const fetchCategoriesAsync = () => async (dispatch) => {
     //開始從server抓取categories
@@ -32,4 +31,3 @@ export const fetchCategoriesAsync = () => async (dispatch) => {
         dispatch(fetchCategoriesFailed(error));
     }
 }
-*/
