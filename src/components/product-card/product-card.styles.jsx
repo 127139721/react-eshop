@@ -1,92 +1,92 @@
-import styled from 'styled-components';
+import { styled as MUIStyled } from "@mui/material/styles";
 
-export const ProductCartContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: 350px;
-  align-items: center;
-  position: relative;
 
-  @media screen and (max-width: 800px) {
+export const ProductCartContainer = MUIStyled("div")(({ theme }) => ({
+  width: "100%",
+  display: "flex",
+  flexDirection: "column",
+  height: "350px",
+  alignItems: "center",
+  position: "relative",
+
+  /* md 以下會套用 */
+  [theme.breakpoints.down("md")]: {
     /* 因為是要調整更內層的置中, 所以要用 self*/
-    justify-self: center;
-    align-self: center;
-  }
+    justifySelf: "center",
+    alignSelf: "center",
+  },
 
-  img {
-    width: 100%;
-    height: 95%;
-    object-fit: cover;
-    margin-bottom: 5px;
-  }
+  img: {
+    width: "100%",
+    height: "95%",
+    objectFit: "cover",
+    marginBottom: "5px"
+  },
 
-  button {
-    width: 80%;
-    opacity: 0.7;
-    position: absolute;
-    top: 255px;
-    /* 先隱藏 add to cart 按鈕 */
-    display: none;
+  button: {
+    width: "80px",
+    opacity: "0.7",
+    position: "absolute",
+    top: "255px",
+    display: "none",
 
-    /* 800px 以下會套用 */
-    @media screen and (max-width: 800px) {
+    [theme.breakpoints.down("md")]: {
       /* mobile 下就取消 display: none 特效, 將其設定回 button 的預設值 block */
-      display: block;
-      opacity: 0.8;
-      min-width: 90%;
-      padding: 0 10px;
+      display: "block",
+      opacity: "0.8",
+      minWidth: "90%",
+      padding: "0 10px",
     
-      img {
-        width: 100%;
-        height: 95%;
-        object-fit: cover;
-        margin-bottom: 5px;
-        
+      img: {
+        width: "100%",
+        height: "95%",
+        objectFit: "cover",
+        marginBottom: "5px",
       }
-    }
-  };
+    },
+    
+  },
 
-  &:hover {
-    img {
-      opacity: 0.8;
-    }
+  "&:hover": {
+    img: {
+      opacity: "0.8",
+    },
     /* hover 時候才顯示 add to cart 按鈕 */
-    button {
-      opacity: 0.85;
-      display: flex;
+    button: {
+      opacity: "0.85",
+      display: "flex"
     }
-  }
+  },
 
-  /* 800px 以下會套用 */
-  @media screen and (max-width: 800px) {
-    width: 40vw;
+  // 對每個 product做設定
+  [theme.breakpoints.down("md")]: {
+    width: "40vw",
     /* mobile 就把 hover 特效都取消 */
-    &:hover {
-      img {
-        opacity: unset;
-      }
-      button {
-        opacity: unset;
+    "&:hover": {
+      img : {
+        opacity: "unset",
+      },
+      button : {
+        opacity: "unset",
       }
     }
-  }
+  },
 
-`;
+}));
 
-export const Footer = styled.div`
-  width: 100%;
-  height: 5%;
-  display: flex;
-  justify-content: space-between;
-  font-size: 18px;
-`;
+export const Footer = MUIStyled("div")({
+  width: "100%",
+  height: "5%",
+  display: "flex",
+  justifyContent: "space-between",
+  fontSize: "18px"
+});
 
-export const Name = styled.span`
-  width: 90%;
-  margin-bottom: 15px;
-`;
+export const Name = MUIStyled("span")({
+  width: "90%",
+  marginBottom: "15px"
+});
 
-export const Price = styled.span`
-  width: 10%;
-`;
+export const Price = MUIStyled("span")({
+  width: "10%"
+});
