@@ -11,11 +11,12 @@ import Checkout from './routes/checkout/checkout.component';
 import { setCurrentUser } from './store/user/user.action';
 
 import { GlobalStyle } from './global.styles.jsx';
+import { findAllByAltText } from '@testing-library/react';
 
 // shop/*: 代表 url 只要有 shop/ 後面接什麼都不管, 都會到 Shop component 
 const App = () => { 
+  
   const dispatch = useDispatch();
-
   //使用 useEffect 去觸發 onAuthStateChangedListener 觀察 user login/out
   useEffect(() => {
     //呼叫onAuthStateChangedListener後 google 會回傳一個 unsubscribe object

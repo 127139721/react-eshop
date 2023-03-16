@@ -17,7 +17,6 @@ const DirectoryItem = ({ category }) => {
             </Body>
         </DirectoryItemContainer>
     )
-   
 };
 
 export default DirectoryItem;
