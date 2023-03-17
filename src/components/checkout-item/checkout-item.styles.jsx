@@ -1,18 +1,21 @@
 import styled from 'styled-components';
+import { styled as MUIStyled } from "@mui/material/styles";
 
-export const CheckoutItemContainer = styled.div`
-  width: 100%;
-  display: flex;
-  min-height: 100px;
-  border-bottom: 1px solid darkgrey;
-  padding: 15px 0;
-  font-size: 20px;
-  align-items: center;
 
-  @media screen and (max-width: 800px) {
-    font-size: 18px;
+export const CheckoutItemContainer = MUIStyled("div")(({ theme }) => ({
+  width: "100%",
+  display: "flex",
+  minHeight: "100px",
+  borderBottom: "1px solid darkgrey",
+  padding: "15px 0",
+  fontSize: "20px",
+  alignItems: "center",
+
+  /* md 以下會套用 */
+  [theme.breakpoints.down("md")]: {
+    fontSize: "18px",
   }
-`;
+}));
 
 export const ImageContainer = styled.div`
   width: 23%;
