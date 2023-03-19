@@ -1,26 +1,29 @@
-import styled from 'styled-components';
+import { styled as MUIStyled } from "@mui/material/styles";
 
-export const CategoryContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    column-gap: 20px;
-    row-gap: 50px;
+export const CategoryContainer = MUIStyled("div")(({ theme }) => ({
+  display: "grid",
+  gridTemplateColumns: "repeat(4, 1fr)",
+  gridColumnGap: "20px",
+  gridRowGap: "50px",
 
-    @media screen and (max-width: 800px) {
-        grid-template-columns: 1fr 1fr;
-        /* grid-gap: 5px; */
-        column-gap: 1px;
-        justify-content: center;
-        align-content: center;
-    }
-`;
+  /* md 以下會套用 */
+  [theme.breakpoints.down("md")]: {
+    gridTemplateColumns: "1fr 1fr",
+    // gridRowGap: "5px",
+    // gridColumnGap: "1px",
+    justifyContent: "center",
+    alignContent: "center",
+    marginLeft: "12px",
+  },
+}));
 
-export const Title = styled.h2`
-    font-size: 38px;
-    margin-bottom: 25px;
-    text-align: center;
+export const Title = MUIStyled("h2")(({ theme }) => ({
+  fontSize: "38px",
+  marginBottom: "25px",
+  textAlign: "center",
 
-    @media screen and (max-width: 800px) {
-        font-size: 28px;
-    }
-`;
+  /* md 以下會套用 */
+  [theme.breakpoints.down("md")]: {
+    fontSize: "28px",
+  },
+}));

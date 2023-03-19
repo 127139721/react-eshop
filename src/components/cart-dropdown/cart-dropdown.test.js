@@ -10,6 +10,7 @@ import * as actions from '../../store/cart/cart.action';
 import CartDropdown from '../cart-dropdown/cart-dropdown.component';
 import CartItem from '../cart-item/cart-item.component';
 import { setIsCartToggleHidden } from '../../store/cart/cart.action'
+import { CART_ACTION_TYPES } from '../../store/cart/cart.types';
 
 export const createMockStore = ({ state, reducers }) => {
   const store = createStore(combineReducers(reducers), state);
@@ -24,6 +25,7 @@ export const createMockStore = ({ state, reducers }) => {
 describe('CartDropdown component', () => {
   let mockHistory, mockDispatch;
 
+  //每個 test 都會再來跑這裡
   beforeEach(() => {
     mockHistory = {
       push: jest.fn()
@@ -47,13 +49,9 @@ describe('CartDropdown component', () => {
     };
 
     const mockReducer = (
-      state = {
-        isCartOpen: true,
-        cartItems: [cartItem]
-      },
+      state = { isCartOpen: true, cartItems: [cartItem] },
       action
     ) => { return state; }
-
 
     store = createMockStore({
       reducers: { cart: mockReducer }
@@ -66,16 +64,15 @@ describe('CartDropdown component', () => {
           </Provider>
       </BrowserRouter>
     );
-
   });
 
-  /*
-  const CART_INITIAL_STATE =  {"payload": true, "type": "cart/SET_CART_TOGGLE_HIDDEN"}; 
+  //testing action
+  const CART_INITIAL_STATE =  {"payload": false, "type": CART_ACTION_TYPES.SET_CART_TOGGLE_HIDDEN}; 
   const expected = CART_INITIAL_STATE
   it('should render EmptyMessageContainer if cartItems is empty', () => {
     expect(actions.setIsCartToggleHidden(false)).toEqual(expected);
   });
-  */
+  
 
   it('should render ShopPage component', () => {
     let store;

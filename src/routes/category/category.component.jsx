@@ -7,7 +7,7 @@ import ProductCard from '../../components/product-card/product-card.component';
 import { selectCategoriesMap, selectCategoriesIsLoading} from '../../store/categories/categories.selector'
 import { CategoryContainer, Title } from './category.styles';
 
-
+// 顯示特定產品頁面
 const Category = () => {
     const { category } = useParams();
     const categoriesMap = useSelector(selectCategoriesMap);
