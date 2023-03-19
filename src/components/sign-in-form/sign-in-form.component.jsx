@@ -1,90 +1,119 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import FormInput from '../form-input/form-input.component';
-import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
+import FormInput from "../form-input/form-input.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import {
   signInAuthUserWithEmailAndPassword,
   signInWithGooglePopup,
-} from '../../utils/firebase/firebase.utils';
-import { SignInContainer, ButtonsContainer } from './sign-in-form.styles';
-
-
-//宣告物件給 input fileds 使用
-const defaultFormFields = {
-    email: '',
-    password: '',
-};
+} from "../../utils/firebase/firebase.utils";
+import { SignInContainer, ButtonsContainer } from "./sign-in-form.styles";
+import { Grid, TextField } from "@mui/material";
+import { useForm, Form } from "../../components/form-input/useForm";
+import Input from "../../components/form-input/Input";
+import { Box } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
 const SignInForm = () => {
-    //上面宣告之物件搭配 useState hook 設定給 input fileds 使用
-    const [formFields, setFormFields] = useState(defaultFormFields);
-    //從 formFields de-constructing 取值
-    const {email, password} = formFields;
+  const initialFValues = {
+    email: "",
+    password: "",
+  };
 
-    const resetFormFields = () => {
-        setFormFields(defaultFormFields);
+  const navigate = useNavigate();
+
+  //非google login
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+    try {
+      const { user } = await signInWithGooglePopup();
+      //登入後抓出google回傳之user info
+      resetForm();
+      navigate("/");
+    } catch (error) {}
+  };
+
+  //從 useForm 那邊會回傳這五個變數 或 funcs
+  const { values, handleInputChange, errors, setErrors, resetForm } = useForm(
+    initialFValues
+  );
+
+  const validate = (fieldValues = values) => {
+    let temp = { ...errors };
+    if ("password" in fieldValues)
+      temp.password = fieldValues.password ? "" : "This field is required.";
+    if ("email" in fieldValues)
+      if (!temp.email)
+        temp.email = fieldValues.email ? "" : "This field is required.";
+      else
+        temp.email = /$^|.+@.+..+/.test(fieldValues.email)
+          ? ""
+          : "Email is not valid.";
+    //console.log("errors", temp);
+    setErrors({
+      ...temp,
+    });
+
+    //如果每個 fieldValues 都是 "", 因為初始值是"", 代表所有field都是合法, 就會 return T
+    if (fieldValues === values)
+      return Object.values(temp).every((x) => x == "");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validate()) {
+      try {
+        const { user } = await signInAuthUserWithEmailAndPassword(
+          values.email,
+          values.password
+        ); //登入後抓出google回傳之user info
+        resetForm();
+        navigate("/");
+      } catch (error) {}
     }
+  };
 
-    //非re-direct login
-    const signInWithGoogle  = async() => {
-        await signInWithGooglePopup();
-    };
-
-    //按下建立 user
-    const handleSubmit = async(event) => {
-       event.preventDefault();
-       try{
-            const { user } = await signInAuthUserWithEmailAndPassword(email, password); //登入後抓出google回傳之user info
-            resetFormFields();
-       }
-       catch(error){
-           
-       }
-    }
-
-    const handleChange = (event) => {
-        //從event.target 取出 name & value 就是下面input給的 name="" & value=""
-        const {name, value} = event.target;
-        //使用 useState hook 的 setFormFields 把 value 設定回對應的 name field in formFields
-        setFormFields({...formFields, [name]: value});
-    }
-
-    return(
-        <SignInContainer>
-            <h2>Already have an account?</h2>
-            <span>Sign in with your email and password</span>
-            <form onSubmit={handleSubmit}>
-                {/*handleChange 搭配 name field, ex.name="displayName" 之後才有辦法判斷是哪一個 input 被觸發 */}
-                {/*value={displayName} 需要跟上面的obj name 對應這樣才會顯示哪個 obj 的值 */}
-                <FormInput 
-                    label="Emial" 
-                    type="email" 
-                    required 
-                    onChange={handleChange} 
-                    name="email" 
-                    value={email}
-                />
-
-                <FormInput 
-                    label="Password" 
-                    type="password" 
-                    required 
-                    onChange={handleChange} 
-                    name="password" value={password}
-                />
-                <ButtonsContainer>
-                    <Button type='submit'>Sign In</Button>
-                    <Button
-                        buttonType={BUTTON_TYPE_CLASSES.google}
-                        type='button'
-                        onClick={signInWithGoogle}
-                    >
-                        Sign In With Google
-                    </Button>
-                </ButtonsContainer>
-            </form>
-        </SignInContainer>
-    )
-}
+  return (
+    <SignInContainer>
+      <h2>Already have an account?</h2>
+      <span>Sign in with your email and password</span>
+      <Form onSubmit={handleSubmit}>
+        <Grid container>
+          <Grid item container>
+            <Grid item xs={12}>
+              <Input
+                name="email"
+                label="Email"
+                value={values.email}
+                onChange={handleInputChange}
+                error={errors.email}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12} sx={{ marginBottom: 2 }}>
+              <Input
+                name="password"
+                label="Password"
+                value={values.password}
+                onChange={handleInputChange}
+                error={errors.password}
+              />
+            </Grid>
+            <ButtonsContainer>
+              <Button type="submit">Sign In</Button>
+              <Box sx={{ marginLeft: 2 }}></Box>
+              <Button
+                buttonType={BUTTON_TYPE_CLASSES.google}
+                type="button"
+                onClick={signInWithGoogle}
+              >
+                Sign In With Google
+              </Button>
+            </ButtonsContainer>
+          </Grid>
+        </Grid>
+      </Form>
+    </SignInContainer>
+  );
+};
 
 export default SignInForm;
